@@ -1,4 +1,5 @@
 const express = require("express");
+const PORT = process.env.PORT || 5000;
 const helmet = require("helmet");
 const routes = require("./routes");
 const server = express();
@@ -24,4 +25,4 @@ server.use(
 
 server.use("/", routes);
 
-server.listen(8000, () => console.log("Express server running"));
+server.listen(PORT, () => console.log(`Listening on ${PORT}`));
