@@ -24,7 +24,8 @@ const checkURL = async (origin, pathname, redirect) => {
         error: {
           url,
           redirect,
-          message: err.message
+          message: err.message,
+          statusCode: err.statusCode ? err.statusCode : ""
         }
       };
     });
@@ -32,11 +33,11 @@ const checkURL = async (origin, pathname, redirect) => {
 
 exports.check = async (req, res) => {
   const domain = req.body.domain;
-  const start = req.body.start;
-  const ziel = req.body.ziel;
+  const resource = req.body.resource;
+  const redirect = req.body.redirect;
 
   try {
-    const result = await checkURL(domain, start, ziel);
+    const result = await checkURL(domain, resource, redirect);
     res.json(result);
   } catch (e) {
     res.json({ err: e });
