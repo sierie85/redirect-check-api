@@ -9,23 +9,51 @@ const checkURL = async (origin, pathname, redirect) => {
       resolveWithFullResponse: true
     })
     .then(function(res) {
-      const status = res.statusCode;
-      const chain = res.request._redirect.redirects;
-      return {
-        url,
-        redirect,
-        status,
-        chain
-      };
+      const statusCode = res.statusCode;
+      const redirects = res.request._redirect.redirects;
+      const redirectsLength = redirects.length;
+      const lastRedirect = redirects[redirectsLength - 1];
+
+      if (lastRedirect.redirectUri.includes(redirect)) {
+        if (redirectsLength > 1) {
+          return {
+            warning: {
+              url,
+              redirect,
+              statusCode: lastRedirect.statusCode,
+              information: `Successfully redirected from ${url} to ${redirect}. Redirect chain is higher then 1!`
+            }
+          };
+        } else {
+          return {
+            success: {
+              url,
+              redirect,
+              statusCode: lastRedirect.statusCode,
+              information: `Successfully redirected from ${url} to ${redirect}`
+            }
+          };
+        }
+      } else {
+        return {
+          error: {
+            url,
+            redirect,
+            statusCode,
+            information: `Redirected to ${
+              lastRedirect.redirectUri
+            } expected ${redirect}`
+          }
+        };
+      }
     })
     .catch(function(err) {
       return {
-        msg: "Error with request!",
         error: {
           url,
           redirect,
-          message: err.message,
-          statusCode: err.statusCode ? err.statusCode : ""
+          statusCode: err.response.statusCode ? err.response.statusCode : "",
+          information: err.response.statusMessage
         }
       };
     });
@@ -40,6 +68,6 @@ exports.check = async (req, res) => {
     const result = await checkURL(domain, resource, redirect);
     res.json(result);
   } catch (e) {
-    res.json({ err: e });
+    res.json({ error: e });
   }
 };
