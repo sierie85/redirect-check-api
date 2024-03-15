@@ -9,11 +9,7 @@ const server = build({
 });
 
 server.register(helmet);
-server.register(cors, {
-  // setup CORS options,
-  // TODO: stay this way??? or add origin???
-  // if not remove FE-URL from .env
-});
+server.register(cors, {});
 
 try {
   await server.listen({ host: HOST, port: PORT });
