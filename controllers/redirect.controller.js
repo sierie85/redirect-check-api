@@ -46,7 +46,6 @@ export const checkRedirect = async (req, res) => {
 
     return res.code(200).send({ error: resObj });
   } catch (error) {
-    // console.log(error);
     resObj.statusCode = error.code;
     return res.code(200).send({ error: resObj });
   }

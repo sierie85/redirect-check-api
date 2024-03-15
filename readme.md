@@ -1,6 +1,6 @@
 # Redirect-check API-Server
 
-Runs a fastify-server with one route "/v1/check-redirect", which checks if a given domain/path redirects to the desired location.
+Runs a fastify-server with route "/v1/check-redirect", which checks if a given domain/path redirects to the desired location.
 
 run the server:
 

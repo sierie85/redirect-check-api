@@ -10,8 +10,8 @@ t.test('requests the "/v1/check-redirect" route', async (t) => {
     url: "/v1/check-redirect",
     payload: {
       domain: "https://httpbin.org",
-      resource: "/status/301",
-      redirect: "/get",
+      resource: "/status/301/",
+      redirect: "/get/",
     },
   });
   t.equal(response.statusCode, 200, "returns a status code of 200");
